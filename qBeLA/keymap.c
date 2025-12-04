@@ -443,3 +443,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+void post_process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (IS_QK_ONE_SHOT_MOD(keycode) && is_oneshot_layer_active() && record->event.pressed) {
+        clear_oneshot_layer_state(ONESHOT_OTHER_KEY_PRESSED);
+    }
+    return;
+}
