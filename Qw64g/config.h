@@ -106,7 +106,7 @@ enum layers {
 #define ONESHOT_TIMEOUT 3000  // 3 seconds for mods (QMK built-in setting)
 #endif
 
-#ifndef #define TAPPING_TERM
+#ifndef TAPPING_TERM
 #define TAPPING_TERM 120
 #endif
 
