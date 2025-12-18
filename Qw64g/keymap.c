@@ -17,13 +17,13 @@ enum custom_keycodes {
 
 
 
-#define DUAL_FUNC_0 LT(15, KC_Z)
-#define DUAL_FUNC_1 LT(6, KC_F14)
-#define DUAL_FUNC_2 LT(13, KC_F)
-#define DUAL_FUNC_3 LT(5, KC_F15)
-#define DUAL_FUNC_4 LT(2, KC_F18)
-#define DUAL_FUNC_5 LT(3, KC_F13)
-#define DUAL_FUNC_6 LT(1, KC_5)
+#define DUAL_FUNC_0 LT(12, KC_F20)
+#define DUAL_FUNC_1 LT(1, KC_X)
+#define DUAL_FUNC_2 LT(14, KC_F21)
+#define DUAL_FUNC_3 LT(1, KC_5)
+#define DUAL_FUNC_4 LT(11, KC_F24)
+#define DUAL_FUNC_5 LT(2, KC_F6)
+#define DUAL_FUNC_6 LT(7, KC_9)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_voyager(
@@ -71,6 +71,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+const uint16_t PROGMEM combo0[] = { OSL(2), KC_SPACE, COMBO_END};
+const uint16_t PROGMEM combo1[] = { OSL(1), OSM(MOD_LSFT), COMBO_END};
+
+combo_t key_combos[COMBO_COUNT] = {
+    COMBO(combo0, OSL(5)),
+    COMBO(combo1, KC_LEFT_GUI),
+};
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
