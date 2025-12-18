@@ -5,6 +5,16 @@
 #define ZSA_SAFE_RANGE SAFE_RANGE
 #endif
 
+// Layer definitions
+enum layers {
+    _MAIN = 0,
+    _SYM,
+    _NAV,
+    _NUM,
+    _MOUSE,
+    _CTRL
+};
+
 enum custom_keycodes {
   RGB_SLD = ZSA_SAFE_RANGE,
   DRAG_SCROLL,
