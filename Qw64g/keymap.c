@@ -12,7 +12,9 @@ enum custom_keycodes {
   NAVIGATOR_INC_CPI,
   NAVIGATOR_DEC_CPI,
   NAVIGATOR_TURBO,
-  NAVIGATOR_AIM
+  NAVIGATOR_AIM,
+  OS_SYM,
+  OS_NAV,
 };
 
 // Layer states

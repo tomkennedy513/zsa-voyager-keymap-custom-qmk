@@ -86,12 +86,8 @@ enum layers {
     _SYM,
     _NAV,
     _NUM,
-};
-
-// Custom keycodes for sticky layers
-enum custom_keycodes {
-    OS_SYM = SAFE_RANGE,
-    OS_NAV,
+    _MOUSE,
+    _CTRL
 };
 
 // Mod aliases using QMK's built-in one-shot mods
