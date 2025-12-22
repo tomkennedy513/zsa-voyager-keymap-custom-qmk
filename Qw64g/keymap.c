@@ -49,7 +49,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_voyager(
     KC_TRANSPARENT, KC_1,           KC_2,           KC_3,           KC_4,           KC_5,                                           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,                                           KC_Y,           KC_U,           KC_I,           KC_O,           QK_REPEAT_KEY,  KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_A,           KC_S,           KC_D,           KC_F,           KC_G,                                           KC_H,           KC_J,           KC_K,           KC_L,           KC_P,           KC_TRANSPARENT, 
+    TT(4),          KC_A,           KC_S,           KC_D,           KC_F,           KC_G,                                           KC_H,           KC_J,           KC_K,           KC_L,           KC_P,           KC_TRANSPARENT,
     KC_TRANSPARENT, KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                                           KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_QUOTE,       KC_TRANSPARENT, 
                                                     OSM(MOD_LSFT),  OS_SYM,                                         OS_NAV,         KC_SPACE
   ),
@@ -76,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [4] = LAYOUT_voyager(
     KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
-    KC_TRANSPARENT, LSFT(KC_MS_BTN1),LCTL(KC_MS_BTN1),LALT(KC_MS_BTN1),LGUI(KC_MS_BTN1),KC_TRANSPARENT,                                 KC_TRANSPARENT, LGUI(KC_LBRC),  LGUI(KC_RBRC),  LCTL(LSFT(KC_TAB)),LCTL(KC_TAB),   KC_TRANSPARENT,
+    KC_TRANSPARENT, LSFT(KC_MS_BTN1),LCTL(KC_MS_BTN1),LALT(KC_MS_BTN1),LGUI(KC_MS_BTN1),KC_TRANSPARENT,                             KC_TRANSPARENT, LGUI(KC_LBRC),  LGUI(KC_RBRC),  LCTL(LSFT(KC_TAB)),LCTL(KC_TAB),   KC_TRANSPARENT,
     KC_TRANSPARENT, NAVIGATOR_AIM,  KC_MS_BTN2,     KC_MS_BTN3,     KC_MS_BTN1,     DRAG_SCROLL,                                    KC_TRANSPARENT, OSM(MOD_LGUI),  OSM(MOD_LALT),  OSM(MOD_LCTL),  OSM(MOD_LSFT),  KC_TRANSPARENT,
     KC_TRANSPARENT, LGUI(KC_Z),     LGUI(KC_X),     LGUI(KC_C),     LGUI(KC_V),     TO(0),                                          TOGGLE_SCROLL,  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
                                                     KC_LEFT_GUI,    KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
@@ -193,24 +193,6 @@ bool rgb_matrix_indicators_user(void) {
 extern bool set_scrolling;
 extern bool navigator_turbo;
 extern bool navigator_aim;
-void pointing_device_init_user(void) {
-  set_auto_mouse_enable(true);
-}
-
-bool is_mouse_record_user(uint16_t keycode, keyrecord_t* record) {
-  // Treat all keys as mouse keys when in the automouse layer so that any key set resets the timeout without leaving the layer.
-  if (!layer_state_is(AUTO_MOUSE_TARGET_LAYER)){
-    // When depressing a mouse key with a LT key at the same time, the mouse key tracker is not decremented.
-    // This is a workaround to fix that
-    if (IS_MOUSE_KEYCODE(keycode) && !record->event.pressed) {
-      return true;
-    }
-    return false;
-  }
-  else {
-    return false;
-  }
-}
 
 
 
