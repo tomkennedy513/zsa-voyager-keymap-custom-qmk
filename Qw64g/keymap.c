@@ -278,6 +278,32 @@ extern bool navigator_turbo;
 extern bool navigator_aim;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // For non-layer keys (including OSMs)
+  if (keycode != OS_SYM && keycode != OS_NAV) {
+    if (record->event.pressed) {
+      // Mark held layers as "used"
+      if (sym_mode == LAYER_HELD)
+        sym_mode = LAYER_HELD_USED;
+      if (nav_mode == LAYER_HELD)
+        nav_mode = LAYER_HELD_USED;
+      // Mark sticky layers as "used" - ready to deactivate on release
+      if (sym_mode == LAYER_STICKY)
+        sym_mode = LAYER_STICKY_USED;
+      if (nav_mode == LAYER_STICKY)
+        nav_mode = LAYER_STICKY_USED;
+    } else {
+      // On release, clear if we pressed a key while sticky
+      if (sym_mode == LAYER_STICKY_USED) {
+        sym_mode = LAYER_OFF;
+        layer_off(_SYM);
+      }
+      if (nav_mode == LAYER_STICKY_USED) {
+        nav_mode = LAYER_OFF;
+        layer_off(_NAV);
+      }
+    }
+  }
+
   switch (keycode) {
   case QK_MODS ... QK_MODS_MAX:
     // Mouse keys with modifiers work inconsistently across operating systems,
@@ -296,40 +322,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
     }
     break;
-
-  case OS_SYM:
-    if (record->event.pressed) {
-      layer_on(_SYM);
-      sym_mode = LAYER_HELD;
-    } else {
-      if (sym_mode == LAYER_HELD) {
-        // Tapped without using - make sticky and start timeout
-        sym_mode = LAYER_STICKY;
-        sym_timer = timer_read(); // Only start timer when becoming sticky
-      } else {
-        // Was held+used or sticky+used - turn off
-        sym_mode = LAYER_OFF;
-        layer_off(_SYM);
-      }
-    }
-    return false;
-
-  case OS_NAV:
-    if (record->event.pressed) {
-      layer_on(_NAV);
-      nav_mode = LAYER_HELD;
-    } else {
-      if (nav_mode == LAYER_HELD) {
-        // Tapped without using - make sticky and start timeout
-        nav_mode = LAYER_STICKY;
-        nav_timer = timer_read(); // Only start timer when becoming sticky
-      } else {
-        // Was held+used or sticky+used - turn off
-        nav_mode = LAYER_OFF;
-        layer_off(_NAV);
-      }
-    }
-    return false;
 
   case DRAG_SCROLL:
     if (record->event.pressed) {
@@ -373,32 +365,38 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       rgblight_mode(1);
     }
     return false;
-  }
-
-  // For non-layer keys (including OSMs)
-  if (keycode != OS_SYM && keycode != OS_NAV) {
+  case OS_SYM:
     if (record->event.pressed) {
-      // Mark held layers as "used"
-      if (sym_mode == LAYER_HELD)
-        sym_mode = LAYER_HELD_USED;
-      if (nav_mode == LAYER_HELD)
-        nav_mode = LAYER_HELD_USED;
-      // Mark sticky layers as "used" - ready to deactivate on release
-      if (sym_mode == LAYER_STICKY)
-        sym_mode = LAYER_STICKY_USED;
-      if (nav_mode == LAYER_STICKY)
-        nav_mode = LAYER_STICKY_USED;
+      layer_on(_SYM);
+      sym_mode = LAYER_HELD;
     } else {
-      // On release, clear if we pressed a key while sticky
-      if (sym_mode == LAYER_STICKY_USED) {
+      if (sym_mode == LAYER_HELD) {
+        // Tapped without using - make sticky and start timeout
+        sym_mode = LAYER_STICKY;
+        sym_timer = timer_read(); // Only start timer when becoming sticky
+      } else {
+        // Was held+used or sticky+used - turn off
         sym_mode = LAYER_OFF;
         layer_off(_SYM);
       }
-      if (nav_mode == LAYER_STICKY_USED) {
+    }
+    return true;
+  case OS_NAV:
+    if (record->event.pressed) {
+      layer_on(_NAV);
+      nav_mode = LAYER_HELD;
+    } else {
+      if (nav_mode == LAYER_HELD) {
+        // Tapped without using - make sticky and start timeout
+        nav_mode = LAYER_STICKY;
+        nav_timer = timer_read(); // Only start timer when becoming sticky
+      } else {
+        // Was held+used or sticky+used - turn off
         nav_mode = LAYER_OFF;
         layer_off(_NAV);
       }
     }
+    return true;
   }
 
   return true;
